@@ -3,121 +3,353 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rilanci social sito TG Poste</title>
+  <title>Elaborazione Rilanci Social TG Poste</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
+    :root {
+      --bg-color: #f7f9fa;
+      --card-bg: #ffffff;
+      --primary: #004b87;
+      --accent: #fedb00;
+      --text-main: #333333;
+      --text-muted: #666666;
+      --border-radius: 12px;
+    }
+    
     body {
-      font-family: sans-serif;
-      background: #f4f4f4;
-      color: #0d49b5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       margin: 0;
+      padding: 0;
+      line-height: 1.6;
     }
+
     header {
-      background: #edda30;
-      color: #0d49b5;
-      padding: 1rem;
-      font-weight: bold;
-      font-size: 1.2rem;
+      background-color: var(--card-bg);
+      border-bottom: 3px solid var(--accent);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
+    header h1 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
     main {
       max-width: 800px;
-      margin: auto;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .control-panel {
+      background: var(--card-bg);
       padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+      margin-bottom: 2rem;
     }
-    input[type='file'] {
-      background: #edda30;
-      color: #0d49b5;
-      border: none;
-      font-weight: bold;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
+
+    /* Switch Design */
+    .switch-container {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eaeaea;
     }
-    #output {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-    }
-    button {
-      background: #0d49b5;
-      color: #f7e400;
-      padding: 0.5rem 1rem;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      margin-top: 1rem;
+    
+    .radio-label {
+      display: flex;
+      align-items: center;
       cursor: pointer;
+      font-weight: 500;
+      color: var(--primary);
     }
+    .radio-label input[type="radio"] {
+      margin-right: 0.5rem;
+      accent-color: var(--primary);
+      transform: scale(1.2);
+    }
+
+    /* Custom File Input */
+    .file-upload-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    input[type="file"] {
+      display: none;
+    }
+    .btn {
+      background-color: var(--primary);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #003666;
+    }
+    .btn-accent {
+      background-color: var(--accent);
+      color: var(--primary);
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+    }
+    .btn-accent:hover {
+      background-color: #e5c500;
+    }
+    #fileName {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Output Area */
+    #output-container {
+      display: none;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+    }
+    
+    #output-content {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    /* Styles inside the generated HTML (optimized for copy-paste) */
+    .email-preview p { margin-top: 0; margin-bottom: 1rem; }
+    .email-preview ul { margin-top: 0.5rem; margin-bottom: 1.5rem; padding-left: 20px; }
+    .email-preview li { margin-bottom: 0.3rem; }
+    .recap-box { margin-top: 2rem; padding-top: 1.5rem; border-top: 2px dashed #ccc; }
   </style>
 </head>
 <body>
-  <header>Rilanci social sito TG Poste</header>
+
+  <header>
+    <h1>Elaborazione Rilanci Social</h1>
+  </header>
+
   <main>
-    <input type="file" id="fileInput" />
-    <div id="output"></div>
-    <button onclick="copyText()">Copia Testo</button>
+    <div class="control-panel">
+      
+      <div class="switch-container">
+        <label class="radio-label">
+          <input type="radio" name="filterMode" value="sito" checked> 
+          Rilanci sito TG Poste
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="filterMode" value="tg"> 
+          Rilanci TG Poste
+        </label>
+      </div>
+
+      <div class="file-upload-wrapper">
+        <label for="fileInput" class="btn">Carica file Excel (Emplifi)</label>
+        <input type="file" id="fileInput" accept=".xlsx, .xls" />
+        <span id="fileName">Nessun file selezionato</span>
+      </div>
+
+    </div>
+
+    <div id="output-container">
+      <div id="output-content" class="email-preview"></div>
+      <button class="btn btn-accent" onclick="copyText()">Copia Testo Elaborato</button>
+    </div>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     const fileInput = document.getElementById('fileInput');
-    const outputDiv = document.getElementById('output');
+    const fileNameDisplay = document.getElementById('fileName');
+    const outputContainer = document.getElementById('output-container');
+    const outputContent = document.getElementById('output-content');
+    const radioButtons = document.querySelectorAll('input[name="filterMode"]');
 
-    fileInput.addEventListener('change', (e) => {
+    let globalJsonData = null; 
+
+    // Event listeners
+    fileInput.addEventListener('change', handleFile);
+    radioButtons.forEach(radio => radio.addEventListener('change', processData));
+
+    function handleFile(e) {
       const file = e.target.files[0];
-      if (!file) return;
+      if (!file) {
+        fileNameDisplay.textContent = "Nessun file selezionato";
+        return;
+      }
+      
+      fileNameDisplay.textContent = file.name;
 
       const reader = new FileReader();
       reader.onload = function(event) {
         const data = new Uint8Array(event.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const json = XLSX.utils.sheet_to_json(sheet, { raw: false });
-
-        const posts = json.filter(row =>
-          row['Content'] && row['Content'].includes("➡️ Leggi l'articolo")
-        );
-
-        if (posts.length === 0) {
-          outputDiv.innerHTML = '<p>Nessun post valido trovato.</p>';
-          return;
-        }
-
-        const validDates = posts.map(p => new Date(p['Date'])).filter(d => !isNaN(d));
-        const firstDate = validDates[0];
-        const mesi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
-        const meseAnno = mesi[firstDate.getMonth()] + ' ' + firstDate.getFullYear();
-
-        const gruppi = {};
-        posts.forEach(post => {
-          const etichette = String(post['Labels'] || '').split(';').map(p => p.trim());
-          const argomento = etichette.find(p => p && !p.startsWith('#')) || 'Argomento non specificato';
-          const data = new Date(post['Date']);
-          const dataIT = ('0' + data.getDate()).slice(-2) + '/' + ('0' + (data.getMonth() + 1)).slice(-2) + '/' + String(data.getFullYear()).slice(-2);
-          const piattaforma = post['Platform']?.toLowerCase() === 'twitter' ? 'X' : post['Platform']?.charAt(0).toUpperCase() + post['Platform']?.slice(1);
-          const link = post['View on platform'] || '(Link non disponibile perché il post è una storia Linkedin)';
-          const riga = `<li>${dataIT} | ${piattaforma} | ${link}</li>`;
-          if (!gruppi[argomento]) gruppi[argomento] = [];
-          gruppi[argomento].push(riga);
-        });
-
-        let html = `<p>Buongiorno,<br>durante il mese di <strong>${meseAnno}</strong> sui canali social di Poste Italiane abbiamo rilanciato i seguenti argomenti:</p>`;
-        for (const argomento in gruppi) {
-          html += `<p><strong>${argomento}</strong></p><ul>${gruppi[argomento].join('')}</ul>`;
-        }
-
-        outputDiv.innerHTML = html;
+        globalJsonData = XLSX.utils.sheet_to_json(sheet, { raw: false });
+        
+        processData();
       };
       reader.readAsArrayBuffer(file);
-    });
+    }
+    
+    // Funzione per formattare i numeri (K e M) rimuovendo gli 0 inutili
+    function formatNumber(num) {
+      if (num >= 1000000) {
+        return new Intl.NumberFormat('it-IT', { maximumFractionDigits: 2 }).format(num / 1000000) + 'M';
+      } else if (num >= 1000) {
+        return new Intl.NumberFormat('it-IT', { maximumFractionDigits: 2 }).format(num / 1000) + 'K';
+      }
+      return new Intl.NumberFormat('it-IT').format(num);
+    }
+
+    function processData() {
+      if (!globalJsonData) return;
+
+      const mode = document.querySelector('input[name="filterMode"]:checked').value;
+      const validPosts = [];
+      
+      let t_views = 0;
+      let t_interactions = 0;
+      let t_reactions = 0;
+      let t_shares = 0;
+      let t_comments = 0;
+
+      // 1. Filtraggio e gestione metriche
+      globalJsonData.forEach(row => {
+        const content = row['Content'] || '';
+        const contentLower = content.toLowerCase();
+        
+        // Criteri esclusivamente testuali
+        const hasSitoText = content.includes("Leggi l'articolo"); // intercetta anche "▶️ Leggi l'articolo"
+        const hasTgText = contentLower.includes("#tgposte") || contentLower.includes("tg poste");
+        
+        let isValid = false;
+        
+        if (mode === 'sito' && hasSitoText) {
+          isValid = true;
+        } else if (mode === 'tg' && hasTgText) {
+          isValid = true;
+        }
+
+        if (isValid) {
+          const platform = (row['Platform'] || '').toLowerCase();
+          const labels = row['Labels'] || row['OriginalLabels'] || '';
+          
+          const views = Number(row['Total impressions'] || row['Video view count']) || 0;
+          const interactions = Number(row['Total interactions'] || row['Taps forward']) || 0;
+          const reactions = Number(row['Total reactions']) || 0;
+          const shares = Number(row['Total shares']) || 0;
+          const comments = Number(row['Total comments']) || 0;
+
+          t_views += views;
+          t_interactions += interactions;
+          t_reactions += reactions;
+          t_shares += shares;
+          t_comments += comments;
+
+          validPosts.push(row);
+
+          // Gestione duplicazione per post WhatsApp
+          if (platform === 'youtube' && labels.includes('#WHA')) {
+            const waRow = { ...row };
+            waRow['Platform'] = 'Whatsapp';
+            waRow['View on platform'] = 'Post Whatsapp';
+            validPosts.push(waRow);
+          }
+        }
+      });
+
+      if (validPosts.length === 0) {
+        outputContent.innerHTML = '<p>Nessun post valido trovato per i parametri selezionati.</p>';
+        outputContainer.style.display = 'block';
+        return;
+      }
+
+      // 2. Estrazione Data
+      const validDates = validPosts.map(p => new Date(p['Date'])).filter(d => !isNaN(d));
+      const firstDate = validDates.length > 0 ? validDates[0] : new Date();
+      const mesi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+      const meseAnno = mesi[firstDate.getMonth()] + ' ' + firstDate.getFullYear();
+
+      // 3. Raggruppamento e conteggio post per canale
+      const gruppi = {};
+      const channelCounts = {};
+
+      validPosts.forEach(post => {
+        const etichette = String(post['Labels'] || post['OriginalLabels'] || '').split(';').map(p => p.trim());
+        const argomento = etichette.find(p => p && !p.startsWith('#')) || 'Argomento non specificato';
+        
+        const data = new Date(post['Date']);
+        let dataIT = 'Data N/D';
+        if (!isNaN(data)) {
+          dataIT = ('0' + data.getDate()).slice(-2) + '/' + ('0' + (data.getMonth() + 1)).slice(-2) + '/' + String(data.getFullYear()).slice(-2);
+        }
+        
+        let nomePiattaforma = post['Platform'] || 'N/D';
+        if (nomePiattaforma.toLowerCase() === 'twitter') nomePiattaforma = 'X';
+        else nomePiattaforma = nomePiattaforma.charAt(0).toUpperCase() + nomePiattaforma.slice(1);
+        
+        // Popola il conteggio dei post per canale
+        channelCounts[nomePiattaforma] = (channelCounts[nomePiattaforma] || 0) + 1;
+
+        const link = post['View on platform'] || '(Link non disponibile perché il post è una storia Linkedin)';
+        
+        const riga = `<li>${dataIT} | ${nomePiattaforma} | ${link}</li>`;
+        
+        if (!gruppi[argomento]) gruppi[argomento] = [];
+        gruppi[argomento].push(riga);
+      });
+
+      // Formatta i canali in una stringa es: "Facebook: 10, X: 5"
+      const channelsBreakdown = Object.entries(channelCounts)
+        .map(([ch, count]) => `${ch}: ${count}`)
+        .join(', ');
+
+      // 4. Costruzione HTML
+      let html = `<p>Buongiorno,<br>durante il mese di <strong>${meseAnno}</strong> sui canali social di Poste Italiane abbiamo rilanciato i seguenti argomenti:</p>`;
+      
+      for (const argomento in gruppi) {
+        html += `<p><strong>${argomento}</strong></p><ul>${gruppi[argomento].join('')}</ul>`;
+      }
+
+      // 5. Blocco Recap Numerico
+      html += `
+        <div class="recap-box">
+          <p><strong>Recap complessivo metriche del periodo:</strong></p>
+          <ul>
+            <li><strong>Totale post:</strong> ${validPosts.length} (${channelsBreakdown})</li>
+            <li><strong>Visualizzazioni:</strong> ${formatNumber(t_views)}</li>
+            <li><strong>Interazioni:</strong> ${formatNumber(t_interactions)}</li>
+            <li><strong>Reazioni:</strong> ${formatNumber(t_reactions)}</li>
+            <li><strong>Condivisioni:</strong> ${formatNumber(t_shares)}</li>
+            <li><strong>Commenti:</strong> ${formatNumber(t_comments)}</li>
+          </ul>
+        </div>
+      `;
+
+      outputContent.innerHTML = html;
+      outputContainer.style.display = 'block';
+    }
 
     function copyText() {
       const range = document.createRange();
-      range.selectNodeContents(outputDiv);
+      range.selectNodeContents(outputContent);
       const sel = window.getSelection();
       sel.removeAllRanges();
       sel.addRange(range);
       document.execCommand('copy');
+      alert("Testo copiato con successo negli appunti!");
     }
   </script>
 </body>
